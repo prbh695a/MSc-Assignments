@@ -1,0 +1,64 @@
+version: '2'
+services:
+        nginx:
+            build:
+                context: ./nginx    #In Directory nginx
+                dockerfile: Dockerfile
+            container_name: nginx
+            volumes:
+                - ./nginx/www:/var/www/nginx
+            networks:
+               - se_backend
+        hbase:
+           build:
+              context: ./hbase    #In Directory hbase
+              dockerfile: Dockerfile
+           container_name: hbase
+           ports:
+              - "8080:8080"
+              - "2181:2181"
+           networks:
+               se_backend:
+                  aliases:
+                      - zookeeper
+        grproxy:
+           depends_on:
+               - hbase
+           build:
+               context: ./grproxy    #In Directory grproxy
+               dockerfile: Dockerfile
+           container_name: grproxy
+           ports:
+              - "80:80"
+           networks:
+              - se_backend
+              - se_frontend
+        gserve1:
+           depends_on:
+                - hbase
+           build:
+               context: ./gserve    #In Directory grproxy
+               dockerfile: Dockerfile
+           container_name: gserve1
+           networks:
+               - se_backend
+           environment:
+               - server_name=gserve1
+        gserve2:
+           depends_on:
+                - hbase
+                - grproxy
+           build:
+               context: ./gserve    #In Directory grproxy
+               dockerfile: Dockerfile
+           container_name: gserve2
+           networks:
+               - se_backend
+           environment:
+               - server_name=gserve2
+
+networks:
+    se_backend:
+        driver: bridge
+    se_frontend:
+        driver: bridge

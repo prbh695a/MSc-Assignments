@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<header><title>SE2 Library</title></header>
+        <body>
+        <h1 style="font-size:60px;"> SE2 Library </h1>
+    {{$prev := "test"}}
+		{{range .Row}}
+        <table style="width:100%">
+        <tr>
+        <td colspan="2"><b style="font-size:40px;">{{ .Key }}</b>
+      </tr>
+        {{range .Cell}}
+          {{$x := .Column|cellType}}
+          <tr><td colspan="2"><b style="font-size:30px">{{if ne $prev $x }} {{ .Column | cellType }} {{end}}</b></td></tr>
+            <tr>
+          <td> {{ $prev = .Column|cellType }} {{ .Column | cellValue}} </td>
+          <td> {{ .Value  | cellValue}} </td>
+        </tr>
+        {{end}}
+        </table>
+{{end}}
+        </body>
+</html>

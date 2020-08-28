@@ -1,0 +1,6 @@
+const int T = 1;
+
+"durability_fraction":1-P=? [ dc>0 U<=T (dc=0) ]
+
+"durability_probability":"durability_fraction"*100
+

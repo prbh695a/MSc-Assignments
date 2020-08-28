@@ -1,0 +1,4 @@
+docker system prune --all --force
+docker-compose build --nocache
+docker-compose up
+
